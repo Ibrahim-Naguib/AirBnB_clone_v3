@@ -10,7 +10,7 @@ from flask import jsonify, abort, request, make_response
 def get_users():
     """returns all users"""
     users = []
-    for user in storage.all('User').values():
+    for user in storage.all(User).values():
         users.append(user.to_dict())
     return jsonify(users)
 
@@ -19,7 +19,7 @@ def get_users():
                  strict_slashes=False)
 def get_user(user_id):
     """returns user by id"""
-    user = storage.get('User', user_id)
+    user = storage.get(User, user_id)
     if user is None:
         abort(404)
     return jsonify(user.to_dict())
@@ -29,7 +29,7 @@ def get_user(user_id):
                  strict_slashes=False)
 def delete_user(user_id):
     """deletes user by id"""
-    user = storage.get('User', user_id)
+    user = storage.get(User, user_id)
     if user is None:
         abort(404)
     user.delete()
@@ -37,7 +37,7 @@ def delete_user(user_id):
     return jsonify({})
 
 
-@app_views.route('/users/', methods=['POST'],
+@app_views.route('/users', methods=['POST'],
                  strict_slashes=False)
 def post_user():
     """creates a new user"""
@@ -56,7 +56,7 @@ def post_user():
                  strict_slashes=False)
 def put_user(user_id):
     """updates a user by id"""
-    user = storage.get('User', user_id)
+    user = storage.get(User, user_id)
     if user is None:
         abort(404)
     if not request.get_json():
