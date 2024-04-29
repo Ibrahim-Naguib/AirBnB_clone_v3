@@ -38,7 +38,7 @@ def delete_review(review_id):
     review = storage.get(Review, review_id)
     if review is None:
         abort(404)
-    review.delete()
+    storage.delete(review)
     storage.save()
     return make_response(jsonify({}), 200)
 
@@ -66,7 +66,7 @@ def post_review(place_id):
     return make_response(jsonify(review.to_dict()), 201)
 
 
-@app_views.route('/reviews/<string:review_id>', methods=['PUT'],
+@app_views.route('/reviews/<review_id>', methods=['PUT'],
                  strict_slashes=False)
 def put_review(review_id):
     """updates a review by id"""
