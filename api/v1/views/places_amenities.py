@@ -8,11 +8,11 @@ from api.v1.views import app_views
 from flask import jsonify, abort, request, make_response
 
 
-@app_views.route('/places/<string:place_id>/amenities', methods=['GET'],
+@app_views.route('/places/<place_id>/amenities', methods=['GET'],
                  strict_slashes=False)
 def get_place_amenities(place_id):
     """returns all amenities of a place"""
-    place = storage.get('Place', place_id)
+    place = storage.get(Place, place_id)
     if place is None:
         abort(404)
     amenities = []
@@ -25,13 +25,13 @@ def get_place_amenities(place_id):
     return jsonify(amenities)
 
 
-@app_views.route('/places/<string:place_id>/amenities/<string:amenity_id>',
+@app_views.route('/places/<place_id>/amenities/<amenity_id>',
                  methods=['DELETE'],
                  strict_slashes=False)
 def delete_place_amenity(place_id, amenity_id):
     """deletes amenity by id"""
-    place = storage.get("Place", place_id)
-    amenity = storage.get("Amenity", amenity_id)
+    place = storage.get(Place, place_id)
+    amenity = storage.get(Amenity, amenity_id)
     if place is None or amenity is None:
         abort(404)
     if os.getenv('HBNB_TYPE_STORAGE') == 'db':
@@ -42,16 +42,16 @@ def delete_place_amenity(place_id, amenity_id):
         abort(404)
     place_amenities.remove(amenity)
     place.save()
-    return jsonify({})
+    return make_response(jsonify({}), 200)
 
 
-@app_views.route('/places/<string:place_id>/amenities/<string:amenity_id>',
+@app_views.route('/places/<place_id>/amenities/<amenity_id>',
                  methods=['POST'],
                  strict_slashes=False)
 def post_place_amenity(place_id, amenity_id):
     """creates a new amenity"""
-    place = storage.get('Place', place_id)
-    amenity = storage.get('Amenity', amenity_id)
+    place = storage.get(Place, place_id)
+    amenity = storage.get(Amenity, amenity_id)
     if place is None or amenity is None:
         abort(404)
     if os.getenv('HBNB_TYPE_STORAGE') == 'db':
